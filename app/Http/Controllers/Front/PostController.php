@@ -11,16 +11,20 @@ class PostController extends Controller
     {
         $posts = Post::query()
                      ->with('user')
-                     ->orderBy('publication_date', 'desc')
-                     ->paginate();
+                     ->where('publication_date', '<=', now())
+                     ->orderBy('publication_date', request()->query('order', 0) ? 'asc' : 'desc')
+                     ->paginate()
+                     ->withQueryString();
 
-        return view('index', compact('posts'));
+        return view('front.post.index', compact('posts'));
     }
 
     public function show($id)
     {
-        $post = Post::findOrFail($id);
+        $post = Post::query()
+                    ->where('publication_date', '<=', now())
+                    ->findOrFail($id);
 
-        return view('post', compact('post'));
+        return view('front.post.show', compact('post'));
     }
 }

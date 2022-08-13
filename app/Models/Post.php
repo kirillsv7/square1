@@ -19,11 +19,18 @@ class Post extends Model
         'publication_date',
     ];
 
-    protected function publicationDate(): Attribute
+    protected function publicationDateForFront(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => Carbon::createFromFormat('Y-m-d H:i:s', $value)
-                                     ->format('d M Y, H:m')
+            get: fn() => Carbon::createFromFormat('Y-m-d H:i:s', $this->publication_date)
+                               ->format('d M Y, H:m')
+        );
+    }
+
+    protected function isVisible(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => Carbon::createFromFormat('Y-m-d H:i:s', $this->publication_date) < now()
         );
     }
 
