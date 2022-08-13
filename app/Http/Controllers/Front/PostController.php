@@ -7,20 +7,20 @@ use App\Models\Post;
 
 class PostController extends Controller
 {
-    /**
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        return view('index');
+        $posts = Post::query()
+                     ->with('user')
+                     ->orderBy('publication_date', 'desc')
+                     ->paginate();
+
+        return view('index', compact('posts'));
     }
 
-    /**
-     * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Post $post)
+    public function show($id)
     {
-        //
+        $post = Post::findOrFail($id);
+
+        return view('post', compact('post'));
     }
 }

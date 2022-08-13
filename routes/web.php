@@ -17,8 +17,8 @@ use App\Http\Controllers\Dashboard\DashboardController;
 
 Auth::routes();
 
-Route::get('/', [PostController::class, 'index']);
-Route::get('post/{id}', [PostController::class, 'show']);
+Route::get('/', [PostController::class, 'index'])->name('post.index');
+Route::get('post/{id}', [PostController::class, 'show'])->name('post.show');
 
 Route::group([
     'middleware' => ['auth'],
