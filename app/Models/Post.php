@@ -23,7 +23,7 @@ class Post extends Model
     {
         return Attribute::make(
             get: fn() => Carbon::createFromFormat('Y-m-d H:i:s', $this->publication_date)
-                               ->format('d M Y, H:m')
+                               ->format('d M Y, H:i')
         );
     }
 
