@@ -2,28 +2,29 @@
 
 namespace App\Http\Controllers\Front;
 
+use App\Contracts\PostRepositoryInterface;
 use App\Http\Controllers\Controller;
-use App\Models\Post;
 
 class PostController extends Controller
 {
+    /**
+     * @param  PostRepositoryInterface  $repository
+     */
+    public function __construct(
+        protected PostRepositoryInterface $repository
+    ) {
+    }
+
     public function index()
     {
-        $posts = Post::query()
-                     ->with('user')
-                     ->where('publication_date', '<=', now())
-                     ->orderBy('publication_date', request()->query('order', 0) ? 'asc' : 'desc')
-                     ->paginate()
-                     ->withQueryString();
+        $posts = $this->repository->index();
 
         return view('front.post.index', compact('posts'));
     }
 
-    public function show($id)
+    public function show(int $id)
     {
-        $post = Post::query()
-                    ->where('publication_date', '<=', now())
-                    ->findOrFail($id);
+        $post = $this->repository->get($id);
 
         return view('front.post.show', compact('post'));
     }

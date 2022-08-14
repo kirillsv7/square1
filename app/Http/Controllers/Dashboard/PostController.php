@@ -2,20 +2,24 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Contracts\PostRepositoryInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Post\StoreRequest;
-use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
+    /**
+     * @param  PostRepositoryInterface  $repository
+     */
+    public function __construct(
+        protected PostRepositoryInterface $repository
+    ) {
+    }
+
     public function index()
     {
-        $posts = Post::query()
-                     ->where('user_id', Auth::id())
-                     ->orderBy('publication_date', request()->query('order', 0) ? 'asc' : 'desc')
-                     ->paginate()
-                     ->withQueryString();
+        $posts = $this->repository->indexByAuthUser();
 
         return view('dashboard.post.index', compact('posts'));
     }
@@ -29,17 +33,14 @@ class PostController extends Controller
     {
         $data = $request->validated() + ['user_id' => Auth::id()];
 
-        Post::query()
-            ->create($data);
+        $this->repository->store($data);
 
         return redirect()->route('dashboard.post.index');
     }
 
-    public function show($id)
+    public function show(int $id)
     {
-        $post = Post::query()
-                    ->where('user_id', Auth::id())
-                    ->findOrFail($id);
+        $post = $this->repository->getByAuthUser($id);
 
         return view('front.post.show', compact('post'));
     }
