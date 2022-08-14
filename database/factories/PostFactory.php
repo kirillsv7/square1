@@ -21,7 +21,7 @@ class PostFactory extends Factory
             'user_id' => $userIds->random(),
             'title' => fake()->text(rand(20, 40)),
             'description' => fake()->text(),
-            'publication_date' => Carbon::now()->subMinutes(rand(-10000, 10000))
+            'publication_date' => Carbon::now()->subMinutes(rand(20160, -10080))->seconds(0)
         ];
     }
 }
