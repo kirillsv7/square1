@@ -13,7 +13,7 @@
                         @endif
                     </div>
                 @endif
-                <div class="card">
+                <div class="card border-light">
                     <div class="card-body">
                         <h1 class="card-title fs-3">{{ $post->title }}</h1>
                         <p class="card-text">{{ $post->description }}</p>
