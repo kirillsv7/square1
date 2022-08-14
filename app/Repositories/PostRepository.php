@@ -8,14 +8,14 @@ use Illuminate\Support\Facades\Auth;
 
 class PostRepository extends Repository implements PostRepositoryInterface
 {
-    protected array $relations = ['user'];
+    const RELATIONS = ['user'];
 
     /**
      * @param  Post  $post
      */
     public function __construct(Post $post)
     {
-        parent::__construct($post, $this->relations);
+        parent::__construct($post, self::RELATIONS);
     }
 
     public function index()
@@ -29,7 +29,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
         return $query->where('publication_date', '<=', now())
                      ->orderBy('publication_date', request()->query('order', 0) ? 'asc' : 'desc')
                      ->paginate()
-                     ->withQueryString();;
+                     ->withQueryString();
     }
 
     public function indexByAuthUser()
@@ -48,7 +48,8 @@ class PostRepository extends Repository implements PostRepositoryInterface
 
     public function get(int $id)
     {
-        return $this->model->where('publication_date', '<=', now())->findOrFail($id);
+        return $this->model->where('publication_date', '<=', now())
+                           ->findOrFail($id);
     }
 
     public function getByAuthUser(int $id)
