@@ -24,9 +24,16 @@ class StoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'title'            => ['string', 'required'],
-            'description'      => ['string', 'required'],
+            'title'            => ['required'],
+            'description'      => ['required'],
             'publication_date' => ['date_format:Y-m-d\TH:i', 'required'],
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'publication_date.date_format' => 'The publication date does not match the format',
         ];
     }
 }

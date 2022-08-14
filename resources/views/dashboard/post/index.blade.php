@@ -9,21 +9,21 @@
                     <div class="card-body">
                         <div class="d-flex flex-wrap align-items-baseline justify-content-between">
                             <a class="btn btn-primary mb-2" href="{{ route('dashboard.post.create') }}">
-                                {{ _('Add post') }}
+                                {{ __('Add post') }}
                             </a>
                             <select class="form-select mb-2 w-auto" id="post-order">
-                                <option value="0">{{ _('Newest first') }}</option>
+                                <option value="0">{{ __('Newest first') }}</option>
                                 <option value="1"
-                                        @if(request()->query('order') == 1) selected @endif>{{ _('Oldest first') }}
+                                        @if(request()->query('order') == 1) selected @endif>{{ __('Oldest first') }}
                                 </option>
                             </select>
                         </div>
                         <table class="table">
                             <thead>
                             <tr>
-                                <td>{{ _('ID') }}</td>
-                                <td>{{ _('Title') }}</td>
-                                <td>{{ _('Publication date') }}</td>
+                                <td>{{ __('ID') }}</td>
+                                <td>{{ __('Title') }}</td>
+                                <td>{{ __('Publication date') }}</td>
                             </tr>
                             </thead>
                             <tbody>
@@ -49,7 +49,7 @@
                             @empty
                                 <tr>
                                     <td colspan="3" class="text-center">
-                                        {{ _('Create your first post') }}
+                                        {{ __('Create your first post') }}
                                     </td>
                                 </tr>
                             @endforelse
