@@ -10,7 +10,7 @@
                         <option value="1" @if(request()->query('order') == 1) selected @endif>Oldest first</option>
                     </select>
                 </div>
-                @foreach($posts as $post)
+                @forelse($posts as $post)
                     <div class="card border-light mb-4">
                         <div class="card-body">
                             <h2 class="card-title fs-4">
@@ -23,7 +23,13 @@
                                 by {{ $post->user->name }}</p>
                         </div>
                     </div>
-                @endforeach
+                @empty
+                    <div class="card border-light mb-4">
+                        <div class="card-body">
+                            <h3 class="fs-4 m-0">{{ __('Write your first post') }}</h3>
+                        </div>
+                    </div>
+                @endforelse
 
                 {{ $posts->links() }}
             </div>

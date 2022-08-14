@@ -15,13 +15,17 @@ class PostFactory extends Factory
      */
     public function definition()
     {
-        $userIds = User::query()->select('id')->where('id', '!=', 1)->pluck('id');
+        $userIds = User::query()->select('id');
+        if (env('APP_ENV') != 'testing') {
+            $userIds = $userIds->where('id', '!=', 1);
+        }
+        $userIds = $userIds->pluck('id');
 
         return [
-            'user_id' => $userIds->random(),
-            'title' => fake()->text(rand(20, 40)),
-            'description' => fake()->text(),
-            'publication_date' => Carbon::now()->subMinutes(rand(20160, -10080))->seconds(0)
+            'user_id'          => $userIds->random(),
+            'title'            => fake()->text(rand(20, 40)),
+            'description'      => fake()->text(),
+            'publication_date' => Carbon::now()->addMinutes(rand(-20160, 10080))->seconds(0),
         ];
     }
 }
