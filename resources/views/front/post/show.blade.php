@@ -14,7 +14,7 @@
                     <div class="card-body">
                         <h1 class="card-title fs-3">{{ $post->title }}</h1>
                         <p class="card-text">{{ $post->description }}</p>
-                        <p class="fs-6 mb-0 text-muted">{{ $post->publication_date }} by {{ $post->user->name }}</p>
+                        <p class="fs-6 mb-0 text-muted">{{ $post->publication_date }} {{ __('by') }} {{ $user->name }}</p>
                     </div>
                 </div>
             </div>

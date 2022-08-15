@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Contracts\PostRepositoryInterface;
+use App\Contracts\UserRepositoryInterface;
 use App\Exceptions\PostNotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Post\StoreRequest;
@@ -13,7 +14,8 @@ use Illuminate\Contracts\View\View;
 class PostController extends Controller
 {
     public function __construct(
-        protected PostRepositoryInterface $repository
+        protected PostRepositoryInterface $postRepository,
+        protected UserRepositoryInterface $userRepository
     ) {
     }
 
@@ -23,7 +25,7 @@ class PostController extends Controller
         $page   = request()->query('page', 1);
         $order  = request()->query('order', 0) ? 'asc' : 'desc';
 
-        $posts = $this->repository->indexByUser($userId, $page, $order);
+        $posts = $this->postRepository->indexByUser($userId, $page, $order);
 
         return view('dashboard.post.index', compact('posts'));
     }
@@ -37,7 +39,7 @@ class PostController extends Controller
     {
         $data = $request->validated() + ['user_id' => Auth::id()];
 
-        $this->repository->store($data);
+        $this->postRepository->store($data);
 
         return redirect()->route('dashboard.post.index');
     }
@@ -47,12 +49,14 @@ class PostController extends Controller
      */
     public function show(int $id): View
     {
-        $post = $this->repository->getByUser($id, Auth::id());
+        $post = $this->postRepository->getByUser($id, Auth::id());
 
         if ($post === null) {
             throw new PostNotFoundException();
         }
 
-        return view('front.post.show', compact('post'));
+        $user = $this->userRepository->get($post->user_id);
+
+        return view('front.post.show', compact('post', 'user'));
     }
 }

@@ -20,7 +20,7 @@
                             </h2>
                             <p class="card-text">{{ $post->description }}</p>
                             <p class="fs-6 mb-0 text-muted">{{ $post->publication_date_for_front }}
-                                by {{ $post->user->name }}</p>
+                                {{ __('by') }} {{ $users->first(fn ($user) => $user->id === $post->user_id)->name }}</p>
                         </div>
                     </div>
                 @empty
