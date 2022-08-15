@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Front;
 
 use App\Contracts\PostRepositoryInterface;
+use App\Exceptions\PostNotFoundException;
 use App\Http\Controllers\Controller;
-use App\Models\Post;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class PostController extends Controller
 {
@@ -25,10 +24,15 @@ class PostController extends Controller
         return view('front.post.index', compact('posts'));
     }
 
+    /**
+     * @throws PostNotFoundException
+     */
     public function show(int $id): View
     {
-        if (!$post = $this->repository->get($id)) {
-            throw (new ModelNotFoundException)->setModel(Post::class, [$id]);
+        $post = $this->repository->get($id);
+
+        if ($post === null) {
+            throw new PostNotFoundException();
         }
 
         return view('front.post.show', compact('post'));
