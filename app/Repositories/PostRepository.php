@@ -4,69 +4,78 @@ namespace App\Repositories;
 
 use App\Contracts\PostRepositoryInterface;
 use App\Models\Post;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
-class PostRepository extends Repository implements PostRepositoryInterface
+class PostRepository implements PostRepositoryInterface
 {
-    const RELATIONS = ['user'];
+    const RELATIONS = ['user']; // TODO Reimplement
 
-    /**
-     * @param  Post  $post
-     */
-    public function __construct(Post $post)
-    {
-        parent::__construct($post, self::RELATIONS);
+    public function __construct(
+        protected Post $post,
+        protected array $relations = self::RELATIONS
+    ) {
     }
 
-    public function index()
+    public function index(int $page, string $order): LengthAwarePaginator
     {
-        $query = $this->model;
+        $query = $this->post;
 
         if (!empty($this->relations)) {
             $query = $query->with($this->relations);
         }
 
         return $query->where('publication_date', '<=', now())
-                     ->orderBy('publication_date', request()->query('order', 0) ? 'asc' : 'desc')
+                     ->orderBy('publication_date', $order)
                      ->paginate()
                      ->withQueryString();
     }
 
-    public function indexByAuthUser()
+    public function indexByUser(int $userId, int $page, string $order): LengthAwarePaginator
     {
-        $query = $this->model;
+        $query = $this->post;
 
         if (!empty($this->relations)) {
             $query = $query->with($this->relations);
         }
 
-        return $query->where('user_id', Auth::id())
-                     ->orderBy('publication_date', request()->query('order', 0) ? 'asc' : 'desc')
+        return $query->where('user_id', $userId)
+                     ->orderBy('publication_date', $order)
                      ->paginate()
                      ->withQueryString();
     }
 
-    public function get(int $id)
+    public function get(int $id): ?Post
     {
-        $query = $this->model;
+        $query = $this->post;
 
         if (!empty($this->relations)) {
             $query = $query->with($this->relations);
         }
 
-        return $query->where('publication_date', '<=', now())
-                           ->findOrFail($id);
+        return $query->where('id', $id)
+                     ->where('publication_date', '<=', now())
+                     ->first();
     }
 
-    public function getByAuthUser(int $id)
+    public function getByUser(int $id, int $userId): ?Post
     {
-        $query = $this->model;
+        $query = $this->post;
 
         if (!empty($this->relations)) {
             $query = $query->with($this->relations);
         }
 
-        return $query->where('user_id', Auth::id())
-                           ->findOrFail($id);
+        return $query->where('id', $id)
+                     ->where('user_id', $userId)
+                     ->first();
+    }
+
+    public function store(array $data): Post
+    {
+        $model = $this->post->newInstance($data);
+
+        $model->save();
+
+        return $model;
     }
 }

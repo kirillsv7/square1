@@ -15,11 +15,7 @@ class PostFactory extends Factory
      */
     public function definition()
     {
-        $userIds = User::query()->select('id');
-        if (env('APP_ENV') != 'testing') {
-            $userIds = $userIds->where('id', '!=', 1);
-        }
-        $userIds = $userIds->pluck('id');
+        $userIds = User::query()->select('id')->pluck('id');
 
         return [
             'user_id'          => $userIds->random(),

@@ -27,5 +27,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             PostSeeder::class,
         ]);
+
+        cache()->flush();
     }
 }
