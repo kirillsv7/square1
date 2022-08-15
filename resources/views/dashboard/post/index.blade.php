@@ -31,7 +31,9 @@
                                 <tr>
                                     <td>{{ $post->id }}</td>
                                     <td>
-                                        <a class="d-inline-block" href="{{ route('dashboard.post.show', $post->id) }}">
+                                        <a class="d-inline-block"
+                                           href="{{ route(!$post->is_visible ? 'dashboard.post.show' : 'post.show', $post->id) }}"
+                                           target="_blank">
                                             {{ $post->title }}
                                         </a>
                                         @if(!$post->is_visible)

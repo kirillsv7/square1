@@ -34,7 +34,8 @@ class DashboardPostShowTest extends TestCase
              ->assertViewHas('post', function (Post $post) use ($createdPost) {
                  return $post->id === $createdPost->id;
              })
-             ->assertSeeText('This is preview.');
+             ->assertSeeText($createdPost->title)
+             ->assertSeeText($createdPost->description);
     }
 
     public function testNotYetPublishedOwnOk()
@@ -58,12 +59,12 @@ class DashboardPostShowTest extends TestCase
         $user2 = User::factory()->create();
 
         $publishedPost = Post::factory([
-            'user_id' => $user2->id,
+            'user_id'          => $user2->id,
             'publication_date' => Carbon::now()->subMinutes(10)->seconds(0),
         ])->create();
 
         $notYetPublishedPost = Post::factory([
-            'user_id' => $user2->id,
+            'user_id'          => $user2->id,
             'publication_date' => Carbon::now()->addMinutes(10)->seconds(0),
         ])->create();
 

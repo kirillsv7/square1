@@ -7,10 +7,7 @@
                 @if(request()->routeIs('dashboard.post.show'))
                     <a class="btn btn-primary mb-2" href="{{ url()->previous() }}">{{ __('Back to dashboard') }}</a>
                     <div class="alert alert-info">
-                        {{ _('This is preview.') }}
-                        @if(!$post->is_visible)
-                            {{ _('This post is not yet visible.') }}
-                        @endif
+                        {{ __('This post is not yet visible.') }}
                     </div>
                 @endif
                 <div class="card border-light">
