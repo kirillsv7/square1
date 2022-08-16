@@ -15,8 +15,4 @@ class UserNotFoundException extends Exception
             'message' => $this->getMessage(),
         ])->setStatusCode(404);
     }
-
-    public function renderForConsole(){
-        return 'affa';
-    }
 }
